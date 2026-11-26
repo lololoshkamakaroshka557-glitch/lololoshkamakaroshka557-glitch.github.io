@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nocturna — студия нейромузыки</title>
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#07070f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+<div class="bg-orbs"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
+<div class="grain"></div>
+
+<header>
+  <div>
+    <div class="logo">NOCTURNA</div>
+    <div class="logo-sub" data-i18n="app_sub">студия нейромузыки · версия 1.8 · PWA</div>
+  </div>
+  <div class="badge-pro" id="proBadge" title="Подробнее о тарифе"><span class="dot"></span><span data-i18n="pro_badge">PRO&#8734; активен</span></div>
+  <div class="hdr-ctrl">
+    <select id="themeSel" data-i18n-title="theme_title">
+      <option value="dark">🌙 Тёмная</option>
+      <option value="light">☀️ Светлая</option>
+      <option value="system">🖥 Системная</option>
+    </select>
+    <select id="langSel">
+      <option value="ru">🇷🇺 Русский</option>
+      <option value="en">🇬🇧 English</option>
+    </select>
+    <button id="installBtn" data-i18n="install_btn">Установить приложение</button>
+  </div>
+  <div class="badge-note" data-i18n="badge_note">права на все треки — твои &middot; коммерческое использование без лимитов</div>
+</header>
+
+<main>
+  <aside class="panel" id="createPanel">
+    <div>
+      <div class="ptitle" data-i18n="p_desc">Описание трека</div>
+      <div style="height:10px"></div>
+      <textarea id="prompt" data-i18n-ph="prompt_ph" placeholder="Опиши трек своими словами: жанр, настроение, о чём песня&#8230;"></textarea>
+      <div class="hint" data-i18n="p_desc_hint" style="margin-top:7px">Например: «мрачный фонк про ночную гонку по городу» — жанр, темп и настроение я пойму из текста.</div>
+    </div>
+    <div>
+      <div class="ptitle" data-i18n="p_style">Стиль — опиши звук словами</div>
+      <div style="height:8px"></div>
+      <input class="seed-input" id="styleInp" data-i18n-ph="style_ph" placeholder="напр.: фонк, 140 bpm, мрачно, глубокий бас">
+      <div class="hint" data-i18n="style_hint" style="margin-top:6px">Жанр, настроение и темп из этой строки сильнее чипов — как режим Custom в настоящих студиях. Пусто — работают чипы.</div>
+    </div>
+    <div>
+      <div class="ptitle" data-i18n="p_genre">Жанр</div>
+      <div style="height:10px"></div>
+      <div class="chips" id="genreChips"></div>
+    </div>
+    <div>
+      <div class="ptitle" data-i18n="p_mood">Настроение</div>
+      <div style="height:10px"></div>
+      <div class="chips" id="moodChips"></div>
+    </div>
+    <div id="presetWrap" style="display:none">
+      <div class="ptitle" data-i18n="p_presets">Мои пресеты стиля</div>
+      <div style="height:8px"></div>
+      <div class="chips" id="presetChips"></div>
+      <div class="hint" data-i18n="presets_hint" style="margin-top:6px">Сохраняются кнопкой «Сохранить стиль» в модалке любого трека — потом одним касанием применяются к новой генерации.</div>
+    </div>
+    <div class="row">
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_len">Длина</div>
+        <div style="height:8px"></div>
+        <select id="durSel">
+          <option value="30" data-i18n="dur_30">0:30 &mdash; демо</option>
+          <option value="60" data-i18n="dur_60">1:00 &mdash; короткая</option>
+          <option value="120" selected data-i18n="dur_120">2:00 &mdash; стандарт</option>
+          <option value="180" data-i18n="dur_180">3:00 &mdash; полная</option>
+          <option value="240" data-i18n="dur_240">4:00 &mdash; максимум</option>
+          <option value="300" data-i18n="dur_300">5:00 &mdash; длинная</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_bpm">Темп</div>
+        <div style="height:8px"></div>
+        <select id="bpmSel">
+          <option value="0" data-i18n="bpm_auto">как в жанре</option>
+          <option value="80" data-i18n="bpm_slow">медленный</option>
+          <option value="110" data-i18n="bpm_med">средний</option>
+          <option value="140" data-i18n="bpm_fast">быстрый</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_form">Форма</div>
+        <div style="height:8px"></div>
+        <select id="formSel">
+          <option value="classic" data-i18n="form_classic">классическая</option>
+          <option value="compact" data-i18n="form_compact">компактная</option>
+          <option value="epic" data-i18n="form_epic">эпичная</option>
+          <option value="energy" data-i18n="form_energy">энергичная</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_voice">Голос</div>
+        <div style="height:8px"></div>
+        <select id="vocSel">
+          <option value="female" selected data-i18n="voc_female">синт-женский</option>
+          <option value="male" data-i18n="voc_male">синт-мужской</option>
+          <option value="none" data-i18n="voc_none">без голоса</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_lyr">Текст песни</div>
+        <div style="height:8px"></div>
+        <select id="lyrSel">
+          <option value="auto" data-i18n="lyr_auto">напишет Nocturna</option>
+          <option value="custom" data-i18n="lyr_custom">свой текст</option>
+          <option value="none" data-i18n="lyr_none">без текста (инструментал)</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div style="flex:1">
+        <div class="ptitle" data-i18n="p_title">Название</div>
+        <div style="height:8px"></div>
+        <input class="seed-input" id="titleInp" data-i18n-ph="title_ph" placeholder="придумаю сама">
+      </div>
+    </div>
+    <div id="customLyrWrap" style="display:none">
+      <div class="ptitle">Твой текст песни</div>
+      <div style="height:8px"></div>
+      <textarea id="lyrCustom" class="seed-input" rows="7" placeholder="[Куплет]&#10;строка песни&#10;ещё строка&#10;&#10;[Припев]&#10;строка припева&#10;ещё строка"></textarea>
+      <div class="hint" style="margin-top:6px">Понимаю теги: [Куплет], [Припев], [Бридж], [Интро], [Аутро] — английские тоже ([Verse], [Chorus], [Bridge], [Intro], [Outro]). Пустая строка между секциями — на здоровье.</div>
+    </div>
+    <button class="btn-surprise" id="surpriseBtn" data-i18n="btn_surprise">🎲 Сюрприз-трек — наугад</button>
+    <button class="btn-gen" id="genBtn">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.2L21 10l-6.6 1.8L12 18l-2.4-6.2L3 10l6.6-1.8z"/></svg>
+      <span data-i18n="btn_gen">Сгенерировать трек</span>
+      <span class="spin"></span>
+    </button>
+    <div class="examples" id="examples"><div class="ptitle" data-i18n="examples_title" style="margin-bottom:8px">Примеры запросов</div></div>
+    <div>
+      <div class="ptitle" data-i18n="studio_title" style="margin-bottom:12px">Studio &middot; микшер дорожек</div>
+      <div class="mixer" id="mixer"></div>
+      <div class="hint" style="margin-top:10px">Микшер применяется к активному треку: меняешь ползунки &mdash; трек пересобирается с новыми балансами. Как в настоящей студии, только твой.</div>
+    </div>
+    <div class="note-com">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="#34d399" style="flex-shrink:0;margin-top:1px"><path d="M12 2l9 5v6c0 5-3.8 8.4-9 9-5.2-.6-9-4-9-9V7z"/></svg>
+      <span data-i18n="note_com">PRO&#8734;: без кредитов, без лимитов скачиваний, все права на треки передаются тебе. Никаких «7 скачиваний за жизнь» &mdash; это прошло.</span>
+    </div>
+  </aside>
+
+  <section class="panel" id="libraryPanel">
+    <div class="lib-head">
+      <h2 data-i18n="lib_title">Библиотека</h2>
+      <span class="lib-count" id="libCount">0 треков</span>
+    </div>
+    <div id="tracks"></div>
+  </section>
+</main>
+
+<footer id="playerBar">
+  <div class="now" id="nowBlock">
+    <div class="cover-sm" id="coverSm"><canvas id="coverCv" width="108" height="108"></canvas><div class="mini-eq"><i style="height:8px"></i><i style="height:16px;animation-delay:.15s"></i><i style="height:11px;animation-delay:.3s"></i></div></div>
+    <div class="meta">
+      <div class="mt" id="nowTitle" data-i18n="player_now">Ничего не выбрано</div>
+      <div class="ms" id="nowSub" data-i18n="player_sub">сгенерируй первый трек</div>
+    </div>
+  </div>
+  <div class="center">
+    <div class="transport">
+      <button class="tbtn" id="prevBtn" title="Предыдущий"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9.5 12z"/></svg></button>
+      <button class="tbtn" id="loopBtn" title="Повтор трека"><svg viewBox="0 0 24 24"><path d="M17 1l4 4-4 4V6H8a4 4 0 0 0-4 4v2H2v-2a6 6 0 0 1 6-6h9V1zM7 23l-4-4 4-4v3h9a4 4 0 0 0 4-4v-2h2v2a6 6 0 0 1-6 6H7v3z"/></svg></button>
+      <button class="tbtn main" id="playBtn"><svg id="playIco" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+      <button class="tbtn" id="nextBtn" title="Следующий"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l10.5-7z"/></svg></button>
+    </div>
+    <div class="progress">
+      <span class="time" id="tCur">0:00</span>
+      <div class="pwave-wrap" id="pbar"><canvas id="pwave"></canvas><div class="pfill" id="pfill" style="display:none"></div></div>
+      <span class="time" id="tDur">0:00</span>
+    </div>
+  </div>
+  <div class="right">
+    <canvas id="viz" width="260" height="88"></canvas>
+    <div class="vol">
+      <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+      <input type="range" id="volR" min="0" max="100" value="80">
+    </div>
+    <button class="lyr-btn" id="lyrBtn" data-i18n="lyr_btn">Текст песни</button>
+  </div>
+</footer>
+
+<div class="modal" id="lyrModal">
+  <div class="modal-card">
+    <button class="mclose" id="lyrClose">&#10005;</button>
+    <h3 id="lyrTitle" data-i18n="lyr_btn">Текст песни</h3>
+    <div class="m-sub" id="lyrSub"></div>
+    <div class="lyr-body" id="lyrBody"></div>
+    <button class="copy-btn" id="lyrCopy" data-i18n="copy_lyr">Копировать текст</button>
+    <div class="exp-row" id="expRow"></div>
+  </div>
+</div>
+
+<div class="modal" id="proModal">
+  <div class="modal-card">
+    <button class="mclose" id="proClose">&#10005;</button>
+    <h3>Тариф PRO&#8734;</h3>
+    <div class="m-sub">активен с первого запуска · навсегда</div>
+    <ul class="pro-list">
+      <li><span class="ok">&#10003;</span><span><b>Безлимит генераций</b> — никаких кредитов и дневных лимитов.</span></li>
+      <li><span class="ok">&#10003;</span><span><b>Безлимит скачиваний</b> — WAV и MIDI, сколько угодно, хоть сегодня все сто.</span></li>
+      <li><span class="ok">&#10003;</span><span><b>Стемы</b> — барабаны, бас, мелодия, пэды и атмосфера отдельными WAV-файлами.</span></li>
+      <li><span class="ok">&#10003;</span><span><b>MIDI мелодии</b> — открывай в любой студии (FL, Ableton, GarageBand) и играй свои партии.</span></li>
+      <li><span class="ok">&#10003;</span><span><b>Все права — твои</b>: коммерческое использование без ограничений и роялти.</span></li>
+      <li><span class="ok">&#10003;</span><span><b>Мгновенная очередь</b> — генерация начинается сразу, без ожидания.</span></li>
+    </ul>
+  </div>
+</div>
+
+<button id="fab" title="Создать трек" aria-label="Создать трек">＋</button>
+
+<div id="genOverlay">
+  <div class="gen-anim"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div id="genTitle">Генерирую&#8230;</div>
+  <div id="genStage">разбираю описание</div>
+</div>
+
+<div id="toasts"></div>
+<div id="selftest"></div>
+
+<script src="p3a.js"></script>
+<script src="p3b.js"></script>
+<script src="p4.js"></script>
+<script src="p5.js"></script>
+<script src="p6.js"></script>
+<script src="p7.js"></script>
+<script src="p8.js"></script>
+</body>
+</html>
