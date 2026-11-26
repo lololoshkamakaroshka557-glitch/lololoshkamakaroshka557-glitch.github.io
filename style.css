@@ -1,4 +1,4 @@
-/* Nocturna v2.1 — стили */
+/* Nocturna v2.2 — стили */
 :root{
   --bg:#060609; --bg2:#0a0a14; --panel:rgba(14,14,25,.8); --panel2:rgba(19,19,32,.62);
   --line:rgba(255,255,255,.08); --txt:#e8e9f3; --dim:#8b8ea8; --dim2:#5a5d78;
@@ -231,7 +231,38 @@ header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px
   .lyr-btn{display:none}
   .tact .abtn{font-size:10px;padding:7px 0}
 }
-@media(max-width:760px){.orb{filter:blur(56px);animation-duration:26s}}
+@media(max-width:760px){.orb{filter:blur(46px);animation:none;will-change:auto}}
+/* v2.2 MOBILE UX: производительность + удобство пальцев */
+@media(max-width:760px){
+  header{flex-wrap:wrap;row-gap:8px;padding:10px 12px}
+  .badge-pro{padding:6px 10px;font-size:11px}
+  .hdr-ctrl{margin-left:auto}
+  .hdr-ctrl select{padding:5px 7px;font-size:11px}
+  #installBtn{padding:7px 12px;font-size:11px}
+  .logo{font-size:16px;letter-spacing:.2em}
+  .logo-sub{font-size:10px}
+  #tracks{padding:0 10px 12px;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:12px}
+  .cover{height:120px}
+  .tinfo{padding:10px 12px 8px}
+  .tact{gap:4px;padding:0 10px 10px}
+  .tact .abtn{font-size:10px;padding:6px 0;gap:2px}
+  .tact .abtn[data-act=shr]{display:none}
+  #fab{bottom:calc(env(safe-area-inset-bottom) + 84px);width:52px;height:52px;font-size:24px}
+  #createPanel{padding:14px;gap:14px}
+  .modal-card{padding:20px;max-height:86vh}
+  .exp-row .abtn{min-width:76px}
+  .lyr-body{font-size:15px}
+  input[type=range]{height:6px}
+  input[type=range]::-webkit-slider-thumb{width:18px;height:18px}
+  .transport{gap:10px}
+  .tbtn{width:36px;height:36px}
+  .tbtn.main{width:46px;height:46px}
+  /* производительность: без тяжёлых эффектов — телефон не греется и не лагает */
+  .panel{backdrop-filter:blur(9px)}
+  header{backdrop-filter:blur(8px)}
+  #playerBar{backdrop-filter:blur(10px)}
+  .toast{backdrop-filter:none}
+}
 textarea.seed-input{height:auto;min-height:120px;resize:vertical;line-height:1.5;padding-top:12px;font-family:inherit}
 /* ---- светлая тема ---- */
 [data-theme="light"]{
