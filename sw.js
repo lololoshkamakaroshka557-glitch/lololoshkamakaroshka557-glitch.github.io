@@ -1,5 +1,5 @@
 /* Nocturna service worker — офлайн-кэш всего приложения */
-const CACHE='nocturna-v21';
+const CACHE='nocturna-v22';
 const ASSETS=['./','index.html','manifest.webmanifest','style.css','icon.svg','p3a.js','p3b.js','p4.js','p5.js','p6.js','p7.js','p8.js'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
